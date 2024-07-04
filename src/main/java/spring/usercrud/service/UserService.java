@@ -11,11 +11,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import spring.usercrud.constant.PredefinedRole;
 import spring.usercrud.dto.request.UserCreationRequest;
 import spring.usercrud.dto.request.UserUpdateRequest;
 import spring.usercrud.dto.response.UserResponse;
+import spring.usercrud.entity.Role;
 import spring.usercrud.entity.User;
-import spring.usercrud.enums.Role;
 import spring.usercrud.exception.AppException;
 import spring.usercrud.exception.ErrorCode;
 import spring.usercrud.mapper.UserMapper;
@@ -40,6 +41,9 @@ public class UserService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        var role = new HashSet<Role>();
+        roleRepository.findById(PredefinedRole.ROLE_USER).ifPresent(role::add);
+        user.setRoles(role);
 
         if(userRepository.existsByUsername(user.getUsername())){
             throw new AppException(ErrorCode.USER_EXISTED);
