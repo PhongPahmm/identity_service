@@ -1,0 +1,15 @@
+spring:
+    application:
+        name: UserCRUD
+    datasource:
+        username: springuser
+        password: admin
+        url: "jdbc:mysql://localhost:3306/user_database"
+
+server:
+    port: 8080
+    servlet:
+        context-path: /identity
+
+jwt:
+    signerKey: "QCEWFQxG+1TKf2uqSQS8OavSskQcfhwaI1L5cEznNdKvrupgJzDbPMinQ8xpWdG5"
