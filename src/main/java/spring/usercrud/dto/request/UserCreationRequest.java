@@ -3,6 +3,7 @@ package spring.usercrud.dto.request;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import spring.usercrud.validator.DobConstraint;
 
 import java.time.LocalDate;
 
@@ -19,5 +20,6 @@ public class UserCreationRequest {
     String password;
     String firstName;
     String lastName;
+    @DobConstraint(min = 18, message = "INVALID_DATE_OF_BIRTH")
     LocalDate dateOfBirth;
 }

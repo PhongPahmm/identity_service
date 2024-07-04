@@ -15,6 +15,7 @@ import spring.usercrud.dto.request.UserCreationRequest;
 import spring.usercrud.dto.request.UserUpdateRequest;
 import spring.usercrud.dto.response.UserResponse;
 import spring.usercrud.entity.User;
+import spring.usercrud.enums.Role;
 import spring.usercrud.exception.AppException;
 import spring.usercrud.exception.ErrorCode;
 import spring.usercrud.mapper.UserMapper;
@@ -37,8 +38,9 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request){
         User user = userMapper.toUser(request);
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+
         if(userRepository.existsByUsername(user.getUsername())){
             throw new AppException(ErrorCode.USER_EXISTED);
         }
