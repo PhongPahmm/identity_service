@@ -1,5 +1,5 @@
 /* (C)2024 */
-package spring.usercrud.dto.request;
+package spring.usercrud.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class IntrospectRequest {
-    String token;
+public class RefreshResponse {
+    String newToken;
+    boolean authenticated;
 }

@@ -1,9 +1,9 @@
+/* (C)2024 */
 package spring.usercrud.dto.request;
 
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor

@@ -1,8 +1,8 @@
+/* (C)2024 */
 package spring.usercrud.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -17,7 +17,8 @@ public class DobValidator implements ConstraintValidator<DobConstraint, LocalDat
     }
 
     @Override
-    public boolean isValid(LocalDate localDate, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(
+            LocalDate localDate, ConstraintValidatorContext constraintValidatorContext) {
         if (localDate == null) {
             return true;
         }

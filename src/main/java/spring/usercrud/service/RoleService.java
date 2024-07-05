@@ -3,7 +3,6 @@ package spring.usercrud.service;
 
 import java.util.HashSet;
 import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

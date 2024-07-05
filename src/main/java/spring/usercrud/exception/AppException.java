@@ -1,10 +1,11 @@
+/* (C)2024 */
 package spring.usercrud.exception;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @AllArgsConstructor

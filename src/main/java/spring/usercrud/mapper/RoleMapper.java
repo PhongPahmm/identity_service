@@ -1,3 +1,4 @@
+/* (C)2024 */
 package spring.usercrud.mapper;
 
 import org.mapstruct.Mapper;
@@ -10,6 +11,6 @@ import spring.usercrud.entity.Role;
 public interface RoleMapper {
     @Mapping(target = "permissions", ignore = true)
     Role toRole(RoleRequest request);
-    RoleResponse toRoleResponse(Role role);
 
+    RoleResponse toRoleResponse(Role role);
 }

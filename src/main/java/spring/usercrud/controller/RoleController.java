@@ -1,5 +1,7 @@
+/* (C)2024 */
 package spring.usercrud.controller;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -8,8 +10,6 @@ import spring.usercrud.dto.request.ApiResponse;
 import spring.usercrud.dto.request.RoleRequest;
 import spring.usercrud.dto.response.RoleResponse;
 import spring.usercrud.service.RoleService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("roles")
@@ -20,17 +20,13 @@ public class RoleController {
 
     @GetMapping
     public ApiResponse<List<RoleResponse>> getAllRoles() {
-        return ApiResponse.<List<RoleResponse>>builder()
-                .data(roleService.getAllRole())
-                .build();
+        return ApiResponse.<List<RoleResponse>>builder().data(roleService.getAllRole()).build();
     }
 
     @PostMapping
     public ApiResponse<RoleResponse> createRole(@RequestBody RoleRequest request) {
         var role = roleService.createRole(request);
-        return ApiResponse.<RoleResponse>builder()
-                .data(role)
-                .build();
+        return ApiResponse.<RoleResponse>builder().data(role).build();
     }
 
     @DeleteMapping

@@ -1,3 +1,4 @@
+/* (C)2024 */
 package spring.usercrud.constant;
 
 public class PredefinedRole {

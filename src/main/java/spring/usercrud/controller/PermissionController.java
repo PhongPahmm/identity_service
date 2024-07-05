@@ -1,5 +1,7 @@
+/* (C)2024 */
 package spring.usercrud.controller;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -8,8 +10,6 @@ import spring.usercrud.dto.request.ApiResponse;
 import spring.usercrud.dto.request.PermissionRequest;
 import spring.usercrud.dto.response.PermissionResponse;
 import spring.usercrud.service.PermissionService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("permissions")
@@ -26,7 +26,8 @@ public class PermissionController {
     }
 
     @PostMapping
-    public ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest request) {
+    public ApiResponse<PermissionResponse> createPermission(
+            @RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
                 .data(permissionService.createPermission(request))
                 .build();
@@ -34,7 +35,7 @@ public class PermissionController {
 
     @DeleteMapping("/{permission}")
     public ApiResponse<Void> deletePermission(@PathVariable("permission") String permission) {
-       permissionService.deletePermission(permission);
-       return ApiResponse.<Void>builder().build();
+        permissionService.deletePermission(permission);
+        return ApiResponse.<Void>builder().build();
     }
 }

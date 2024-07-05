@@ -1,13 +1,13 @@
+/* (C)2024 */
 package spring.usercrud.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.Date;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +20,7 @@ public class InvalidatedToken {
     @Id
     @Column(name = "id")
     String id;
+
     @Column(name = "expiry_time")
     Date expiryTime;
 }

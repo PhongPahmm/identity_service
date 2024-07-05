@@ -1,11 +1,11 @@
+/* (C)2024 */
 package spring.usercrud.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDate;
 import java.util.Set;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -19,16 +19,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     int id;
+
     @Column(name = "username")
     String username;
+
     @Column(name = "password")
     String password;
+
     @Column(name = "firstname")
     String firstName;
+
     @Column(name = "lastname")
     String lastName;
+
     @Column(name = "dob")
     LocalDate dateOfBirth;
+
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Role> roles;
 }

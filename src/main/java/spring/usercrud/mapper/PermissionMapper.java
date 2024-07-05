@@ -1,3 +1,4 @@
+/* (C)2024 */
 package spring.usercrud.mapper;
 
 import org.mapstruct.Mapper;
@@ -8,5 +9,6 @@ import spring.usercrud.entity.Permission;
 @Mapper(componentModel = "spring")
 public interface PermissionMapper {
     Permission toPermission(PermissionRequest request);
+
     PermissionResponse toPermissionResponse(Permission permission);
 }

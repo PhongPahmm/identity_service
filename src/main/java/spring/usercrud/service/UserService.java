@@ -1,5 +1,8 @@
+/* (C)2024 */
 package spring.usercrud.service;
 
+import java.util.HashSet;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,9 +26,6 @@ import spring.usercrud.mapper.UserMapper;
 import spring.usercrud.repository.RoleRepository;
 import spring.usercrud.repository.UserRepository;
 
-import java.util.HashSet;
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -37,7 +37,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
 
-    public UserResponse createUser(UserCreationRequest request){
+    public UserResponse createUser(UserCreationRequest request) {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -45,37 +45,43 @@ public class UserService {
         roleRepository.findById(PredefinedRole.ROLE_USER).ifPresent(role::add);
         user.setRoles(role);
 
-        if(userRepository.existsByUsername(user.getUsername())){
+        if (userRepository.existsByUsername(user.getUsername())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public UserResponse getMyInfo(){
+    public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(context).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        User user =
+                userRepository
+                        .findByUsername(context)
+                        .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return userMapper.toUserResponse(user);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> getAllUsers(){
+    public List<UserResponse> getAllUsers() {
         log.info("in method getAllUsers");
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
-
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse getUserById(int id){
+    public UserResponse getUserById(int id) {
         log.info("in method getUserById");
-        User user = userRepository.findById(id).orElseThrow(
-                ()-> new AppException(ErrorCode.USER_NOT_FOUND));
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return userMapper.toUserResponse(user);
     }
 
     @PostAuthorize("returnObject.username == authentication.name")
-    public UserResponse updateUser(int id, UserUpdateRequest request){
-        User user = userRepository.findById(id).orElseThrow(
-                ()-> new AppException(ErrorCode.USER_NOT_FOUND));
+    public UserResponse updateUser(int id, UserUpdateRequest request) {
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         var role = roleRepository.findAllById(request.getRoles());
@@ -85,9 +91,11 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(int id){
-        User user = userRepository.findById(id).orElseThrow(()
-                ->new AppException(ErrorCode.USER_NOT_FOUND));
+    public void deleteUser(int id) {
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }
 }

@@ -1,3 +1,4 @@
+/* (C)2024 */
 package spring.usercrud.exception;
 
 import lombok.Getter;
@@ -24,5 +25,4 @@ public enum ErrorCode {
         this.errorMessage = errorMessage;
         this.httpStatusCode = httpStatusCode;
     }
-
 }

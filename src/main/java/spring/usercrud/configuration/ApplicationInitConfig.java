@@ -1,5 +1,8 @@
+/* (C)2024 */
 package spring.usercrud.configuration;
 
+import java.time.LocalDate;
+import java.util.HashSet;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,9 +16,6 @@ import spring.usercrud.entity.Role;
 import spring.usercrud.entity.User;
 import spring.usercrud.repository.RoleRepository;
 import spring.usercrud.repository.UserRepository;
-
-import java.time.LocalDate;
-import java.util.HashSet;
 
 @Configuration
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -32,14 +32,15 @@ public class ApplicationInitConfig {
             if (userRepository.findByUsername("admin").isEmpty()) {
                 var role = new HashSet<Role>();
                 roleRepository.findById(PredefinedRole.ROLE_ADMIN).ifPresent(role::add);
-                User user = User.builder()
-                        .username("admin")
-                        .password(passwordEncoder.encode("admin"))
-                        .firstName("Admin")
-                        .lastName("User")
-                        .dateOfBirth(LocalDate.of(2003, 10, 18))
-                        .roles(role)
-                        .build();
+                User user =
+                        User.builder()
+                                .username("admin")
+                                .password(passwordEncoder.encode("admin"))
+                                .firstName("Admin")
+                                .lastName("User")
+                                .dateOfBirth(LocalDate.of(2003, 10, 18))
+                                .roles(role)
+                                .build();
 
                 userRepository.save(user);
                 log.info("User admin has been created");

@@ -1,6 +1,8 @@
+/* (C)2024 */
 package spring.usercrud.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,8 +15,6 @@ import spring.usercrud.dto.request.UserUpdateRequest;
 import spring.usercrud.dto.response.UserResponse;
 import spring.usercrud.service.UserService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -24,44 +24,38 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setData(userService.createUser(request));
-        return apiResponse;
+    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+        return ApiResponse.<UserResponse>builder().data(userService.createUser(request)).build();
     }
+
     @GetMapping
     public ApiResponse<List<UserResponse>> getAllUsers() {
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
+        authentication
+                .getAuthorities()
+                .forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
 
-        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
-        apiResponse.setData(userService.getAllUsers());
-        return apiResponse;
+        return ApiResponse.<List<UserResponse>>builder().data(userService.getAllUsers()).build();
     }
 
     @GetMapping("my-info")
     public ApiResponse<UserResponse> getUsersById() {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setData(userService.getMyInfo());
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder().data(userService.getMyInfo()).build();
     }
 
     @GetMapping("/{userId}")
     public ApiResponse<UserResponse> getUsersById(@PathVariable("userId") int id) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setData(userService.getUserById(id));
-        return apiResponse;
+        return ApiResponse.<UserResponse>builder().data(userService.getUserById(id)).build();
     }
 
-
     @PutMapping("/{userId}")
-    public ApiResponse<UserResponse> updateUser(@PathVariable("userId") int id,
-                                                @RequestBody UserUpdateRequest request) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setData(userService.updateUser(id, request));
-        return apiResponse;
+    public ApiResponse<UserResponse> updateUser(
+            @PathVariable("userId") int id, @RequestBody UserUpdateRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .data(userService.updateUser(id, request))
+                .build();
     }
 
     @DeleteMapping("/{userId}")
