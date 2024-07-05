@@ -15,11 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import spring.usercrud.dto.request.AuthenticationRequest;
 import spring.usercrud.dto.request.IntrospectRequest;
+import spring.usercrud.dto.request.LogoutRequest;
 import spring.usercrud.dto.response.AuthenticationResponse;
 import spring.usercrud.dto.response.IntrospectResponse;
+import spring.usercrud.dto.response.LogoutResponse;
+import spring.usercrud.entity.InvalidatedToken;
 import spring.usercrud.entity.User;
 import spring.usercrud.exception.AppException;
 import spring.usercrud.exception.ErrorCode;
+import spring.usercrud.repository.LogoutRepository;
 import spring.usercrud.repository.UserRepository;
 
 import java.text.ParseException;
@@ -27,6 +31,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +39,7 @@ import java.util.StringJoiner;
 public class AuthenticationService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
+    LogoutRepository logoutRepository;
     @NonFinal
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
@@ -56,17 +62,41 @@ public class AuthenticationService {
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
+        boolean isValid = true;
+        try {
+            verifyToken(token);
+        }catch (AppException e){
+            isValid = false;
+        }
+        return IntrospectResponse.builder()
+                .valid(isValid)
+                .build();
+    }
 
+    public LogoutResponse logout(LogoutRequest request) throws ParseException, JOSEException {
+        var signedToken = verifyToken(request.getToken());
+        String jti = signedToken.getJWTClaimsSet().getJWTID();
+        Date expirationTime = signedToken.getJWTClaimsSet().getExpirationTime();
+        InvalidatedToken invalidatedToken = new InvalidatedToken(jti, expirationTime);
+        logoutRepository.save(invalidatedToken);
+       return LogoutResponse.builder()
+               .logout(true)
+               .build();
+    }
+
+    private SignedJWT verifyToken(String token) throws ParseException, JOSEException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY);
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         var verified = signedJWT.verify(verifier);
-
-        return IntrospectResponse.builder()
-                .valid(verified && expirationTime.after(new Date()))
-                .build();
+        if (!(verified && expirationTime.after(new Date()))) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        if (logoutRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        return signedJWT;
     }
-
     private String generateToken(User user) throws JOSEException {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -75,6 +105,7 @@ public class AuthenticationService {
                 .issuer("myDomain.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .jwtID(String.valueOf(UUID.randomUUID()))
                 .claim("scope", buildScope(user))
                 .build();
 

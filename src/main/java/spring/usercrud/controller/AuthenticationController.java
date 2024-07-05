@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import spring.usercrud.dto.request.ApiResponse;
 import spring.usercrud.dto.request.AuthenticationRequest;
 import spring.usercrud.dto.request.IntrospectRequest;
+import spring.usercrud.dto.request.LogoutRequest;
 import spring.usercrud.dto.response.AuthenticationResponse;
 import spring.usercrud.dto.response.IntrospectResponse;
+import spring.usercrud.dto.response.LogoutResponse;
 import spring.usercrud.service.AuthenticationService;
 
 import java.text.ParseException;
@@ -32,6 +34,13 @@ public class AuthenticationController {
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
+                .data(result)
+                .build();
+    }
+    @PostMapping("logout")
+    ApiResponse<LogoutResponse> logout(@RequestBody LogoutRequest request) throws JOSEException, ParseException {
+        var result = authenticationService.logout(request);
+        return ApiResponse.<LogoutResponse>builder()
                 .data(result)
                 .build();
     }
