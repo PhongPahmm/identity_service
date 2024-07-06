@@ -25,27 +25,27 @@ public class AuthenticationController {
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request)
             throws JOSEException {
         var result = authenticationService.authenticate(request);
-        return ApiResponse.<AuthenticationResponse>builder().data(result).build();
+        return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 
     @PostMapping("introspect")
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
             throws JOSEException, ParseException {
         var result = authenticationService.introspect(request);
-        return ApiResponse.<IntrospectResponse>builder().data(result).build();
+        return ApiResponse.<IntrospectResponse>builder().result(result).build();
     }
 
     @PostMapping("logout")
     ApiResponse<LogoutResponse> logout(@RequestBody LogoutRequest request)
             throws JOSEException, ParseException {
         var result = authenticationService.logout(request);
-        return ApiResponse.<LogoutResponse>builder().data(result).build();
+        return ApiResponse.<LogoutResponse>builder().result(result).build();
     }
 
     @PostMapping("refresh")
     ApiResponse<RefreshResponse> refresh(@RequestBody RefreshRequest request)
             throws JOSEException, ParseException {
         var result = authenticationService.refresh(request);
-        return ApiResponse.<RefreshResponse>builder().data(result).build();
+        return ApiResponse.<RefreshResponse>builder().result(result).build();
     }
 }
