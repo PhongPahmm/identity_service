@@ -20,13 +20,13 @@ public class RoleController {
 
     @GetMapping
     public ApiResponse<List<RoleResponse>> getAllRoles() {
-        return ApiResponse.<List<RoleResponse>>builder().data(roleService.getAllRole()).build();
+        return ApiResponse.<List<RoleResponse>>builder().result(roleService.getAllRole()).build();
     }
 
     @PostMapping
     public ApiResponse<RoleResponse> createRole(@RequestBody RoleRequest request) {
         var role = roleService.createRole(request);
-        return ApiResponse.<RoleResponse>builder().data(role).build();
+        return ApiResponse.<RoleResponse>builder().result(role).build();
     }
 
     @DeleteMapping

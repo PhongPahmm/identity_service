@@ -21,7 +21,7 @@ public class PermissionController {
     @GetMapping
     public ApiResponse<List<PermissionResponse>> getAllPermissions() {
         return ApiResponse.<List<PermissionResponse>>builder()
-                .data(permissionService.getAllPermission())
+                .result(permissionService.getAllPermission())
                 .build();
     }
 
@@ -29,7 +29,7 @@ public class PermissionController {
     public ApiResponse<PermissionResponse> createPermission(
             @RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
-                .data(permissionService.createPermission(request))
+                .result(permissionService.createPermission(request))
                 .build();
     }
 
