@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `invalidated_token`;
 -- Create the user table
 CREATE TABLE `user` (
     `id` INT NOT NULL AUTO_INCREMENT,
-    `username` VARCHAR(255) NULL,
+    `username` VARCHAR(255) NULL unique collate utf8mb4_unicode_ci,
     `password` VARCHAR(255) NULL,
     `firstname` VARCHAR(255) NULL,
     `lastname` VARCHAR(255) NULL,

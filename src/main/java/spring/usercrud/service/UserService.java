@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -44,11 +45,13 @@ public class UserService {
         var role = new HashSet<Role>();
         roleRepository.findById(PredefinedRole.ROLE_USER).ifPresent(role::add);
         user.setRoles(role);
-
-        if (userRepository.existsByUsername(user.getUsername())) {
+        try{
+            user = userRepository.save(user);
+        }catch (DataIntegrityViolationException e){
             throw new AppException(ErrorCode.USER_EXISTED);
         }
-        return userMapper.toUserResponse(userRepository.save(user));
+
+        return userMapper.toUserResponse(user);
     }
 
     public UserResponse getMyInfo() {
