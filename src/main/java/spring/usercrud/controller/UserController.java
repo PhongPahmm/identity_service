@@ -25,7 +25,7 @@ public class UserController {
 
     @PostMapping
     public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
-        return ApiResponse.<UserResponse>builder().data(userService.createUser(request)).build();
+        return ApiResponse.<UserResponse>builder().result(userService.createUser(request)).build();
     }
 
     @GetMapping
@@ -37,24 +37,24 @@ public class UserController {
                 .getAuthorities()
                 .forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
 
-        return ApiResponse.<List<UserResponse>>builder().data(userService.getAllUsers()).build();
+        return ApiResponse.<List<UserResponse>>builder().result(userService.getAllUsers()).build();
     }
 
     @GetMapping("my-info")
     public ApiResponse<UserResponse> getUsersById() {
-        return ApiResponse.<UserResponse>builder().data(userService.getMyInfo()).build();
+        return ApiResponse.<UserResponse>builder().result(userService.getMyInfo()).build();
     }
 
     @GetMapping("/{userId}")
     public ApiResponse<UserResponse> getUsersById(@PathVariable("userId") int id) {
-        return ApiResponse.<UserResponse>builder().data(userService.getUserById(id)).build();
+        return ApiResponse.<UserResponse>builder().result(userService.getUserById(id)).build();
     }
 
     @PutMapping("/{userId}")
     public ApiResponse<UserResponse> updateUser(
             @PathVariable("userId") int id, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .data(userService.updateUser(id, request))
+                .result(userService.updateUser(id, request))
                 .build();
     }
 
