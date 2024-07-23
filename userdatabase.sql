@@ -67,6 +67,6 @@ CREATE TABLE invalidated_token (
 ALTER TABLE user_roles ADD CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE;
 ALTER TABLE user_roles ADD CONSTRAINT fk_user_roles_roles FOREIGN KEY (roles_name) REFERENCES roles(name) ON DELETE CASCADE;
 
--- Add foreign key constraints to role_permissions table
+-- -- Add foreign key constraints to role_permissions table
 ALTER TABLE roles_permissions ADD CONSTRAINT fk_roles_permissions_roles FOREIGN KEY (role_name) REFERENCES roles(name) ON DELETE CASCADE;
 ALTER TABLE roles_permissions ADD CONSTRAINT fk_roles_permissions_permission FOREIGN KEY (permission_name) REFERENCES permission(name) ON DELETE CASCADE;

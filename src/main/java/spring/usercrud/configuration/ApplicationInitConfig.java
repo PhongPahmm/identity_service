@@ -30,8 +30,18 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
             if (userRepository.findByUsername("admin").isEmpty()) {
+                roleRepository.save(Role.builder()
+                        .name(PredefinedRole.ROLE_USER)
+                        .description("User role")
+                        .build());
+                Role adminRole = roleRepository.save(Role.builder()
+                        .name(PredefinedRole.ROLE_ADMIN)
+                        .description("Admin role")
+                        .build());
+
                 var role = new HashSet<Role>();
-                roleRepository.findById(PredefinedRole.ROLE_ADMIN).ifPresent(role::add);
+                role.add(adminRole);
+
                 User user =
                         User.builder()
                                 .username("admin")
